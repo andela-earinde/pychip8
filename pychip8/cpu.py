@@ -4,6 +4,8 @@
  thoughts into a single place and make reading the program easier
 """
 
+from pychip8.opcode_executor import OpcodeExecutor
+
 
 class Chip8(object):
 
@@ -13,6 +15,8 @@ class Chip8(object):
 
         # register used to store memory address, 16-bit
         self.I = None
+
+        self.opcode_executor = OpcodeExecutor(self)
 
         # 8-bit storage
         self.soundTimer = None
@@ -84,15 +88,16 @@ class Chip8(object):
         for i, chars in enumerate(program):
             self.memory[0x200 + i] = chars
 
-    # clear the display
-    def clear_screen(self)
+    def clear_screen(self):
+        self.renderer.clear_display()
+        for i, j in enumerate(self.display):
+            self.display[i] = 0
 
     def start_cycle(self):
-
         opcode = self.memory[self.pc] << 8 | self.memory[self.pc + 1]
         x = (opcode & 0x0f00) >> 8
         y = (opcode & 0x00f0) >> 4
 
         self.pc += 1
 
-
+        self.opcode_executor.execute(opcode)
