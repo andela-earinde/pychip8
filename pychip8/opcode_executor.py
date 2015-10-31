@@ -108,17 +108,7 @@ class OpcodeExecutor(object):
         """
         Execute for primary opcodes that begin with eight
         """
-        eight_subcases = {
-            0x0000: _zero_eight_execution,
-            0x0001: _first_eight_execution,
-            0x0002: _second_eight_execution,
-            0x0003: _third_eight_execution,
-            0x0004: _fourth_eight_execution,
-            0x0005: _fifth_eight_execution,
-            0x0006: _sixth_eight_execution,
-            0x0007: _seventh_eight_execution,
-            0x000E: _eight_eight_execution
-        }
+
 
     def execute(self, opcode):
         pass
