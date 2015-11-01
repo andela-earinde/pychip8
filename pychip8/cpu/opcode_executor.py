@@ -9,6 +9,11 @@ y - A 4-bit value, the upper 4 bits of the low byte of the instruction
 kk or byte - An 8-bit value, the lowest 8 bits of the instruction
 """
 
+from random import randint
+
+from pychip8.cpu.eight_subcases import eight_subcases
+from pychip8.cpu.e_subcases import e_subcases
+
 
 class OpcodeExecutor(object):
 
@@ -108,7 +113,46 @@ class OpcodeExecutor(object):
         """
         Execute for primary opcodes that begin with eight
         """
+        eight_subcases[opcode & 0x000f](self.cpu, self.x, self.y)
 
+    def _execute_a(self, opcode):
+        """
+        Set I = nnn.
+        The value of register I is set to nnn.
+        """
+        self.cpu.I = opcode & 0x0fff
+
+    def _execute_b(self, opcode):
+        """
+        Jump to location nnn + V0.
+        The program counter is set to nnn plus the value of V0.
+        """
+        self.cpu.pc = (opcode & 0x0fff) + self.cpu.Vx[0]
+
+    def _execute_c(self, opcode):
+        """
+        Set Vx = random byte AND kk.
+        The interpreter generates a random number from 0 to 255,
+        which is then ANDed with the value kk. The results are
+        stored in Vx. See instruction 8xy2 for more information on AND.
+        """
+        self.cpu.Vx[self.x] = randint(0, 0xff) & (opcode & 0x00ff)
+
+    def _execute_d(self, opcode):
+        """
+        Display n-byte sprite starting at memory location I at (Vx, Vy),
+        set VF = collision. The interpreter reads n bytes from memory,
+        starting at the address stored in I. These bytes are then displayed
+        as sprites on screen at coordinates (Vx, Vy). Sprites are XORed onto
+        the existing screen. If this causes any pixels to be erased,
+        VF is set to 1, otherwise it is set to 0. If the sprite is positioned
+        so part of it is outside the coordinates of the display, it wraps
+        around to the opposite side of the screen.
+        """
+        pass
+
+    def _execute_e(self, opcode):
+        e_subcases[opcode & 0x00ff](self.cpu, self.x)
 
     def execute(self, opcode):
         pass
@@ -126,12 +170,12 @@ class OpcodeExecutor(object):
         0x6000: _execute_six,
         0x7000: _execute_seven,
         0x8000: _execute_eight,
-        0xA000: _execute_A,
-        0xB000: _execute_B,
-        0xC000: _execute_C,
-        0xD000: _execute_D,
-        0xE000: _execute_E,
-        0xF000: _execute_F
+        0xA000: _execute_a,
+        0xB000: _execute_b,
+        0xC000: _execute_c,
+        0xD000: _execute_d,
+        0xE000: _execute_e,
+        0xF000: _execute_f
     }
 
 
