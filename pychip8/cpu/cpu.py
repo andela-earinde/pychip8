@@ -98,6 +98,6 @@ class Chip8(object):
         x = (opcode & 0x0f00) >> 8
         y = (opcode & 0x00f0) >> 4
 
-        self.pc += 1
+        self.pc += 2
 
         self.opcode_executor.execute(opcode)

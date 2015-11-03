@@ -177,19 +177,3 @@ class OpcodeExecutor(object):
         0xE000: _execute_e,
         0xF000: _execute_f
     }
-
-
-    """
-    Subopcodes for primary opcodes that begin with f
-    """
-    F_SUBCASES = {
-        0x0007: _first_f_execution,
-        0x000A: _second_f_execution,
-        0x0015: _third_f_execution,
-        0x0018: _fourth_f_execution,
-        0x001E: _fifth_f_execution,
-        0x0029: _sixth_f_execution,
-        0x0033: _seventh_f_execution,
-        0x0055: _eight_f_execution,
-        0x0065: _ninth_f_execution
-    }
