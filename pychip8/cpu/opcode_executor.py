@@ -13,15 +13,14 @@ from random import randint
 
 from pychip8.cpu.eight_subcases import eight_subcases
 from pychip8.cpu.e_subcases import e_subcases
+from pychip8.cpu.f_subcases import f_subcases
 
 
 class OpcodeExecutor(object):
 
-    def __init__(self, cpu, x, y):
+    def __init__(self, cpu):
         # the cpu instance passed
         self.cpu = cpu
-        self.x = x
-        self.y = y
 
     def _clear_display(self):
         """
@@ -154,26 +153,27 @@ class OpcodeExecutor(object):
     def _execute_e(self, opcode):
         e_subcases[opcode & 0x00ff](self.cpu, self.x)
 
-    def execute(self, opcode):
-        pass
+    def _execute_f(self, opcode):
+        f_subcases[opcode & 0x00ff](self.cpu, self.x)
 
-    """
-    Primary opcodes for the main execution
-    """
-    MAIN_CASES = {
-        0x0000: _execute_zero,
-        0x1000: _execute_one,
-        0x2000: _execute_two,
-        0x3000: _execute_three,
-        0x4000: _execute_four,
-        0x5000: _execute_five,
-        0x6000: _execute_six,
-        0x7000: _execute_seven,
-        0x8000: _execute_eight,
-        0xA000: _execute_a,
-        0xB000: _execute_b,
-        0xC000: _execute_c,
-        0xD000: _execute_d,
-        0xE000: _execute_e,
-        0xF000: _execute_f
-    }
+    def execute(self, opcode, x, y):
+        main_cases = {
+            0x0000: self._execute_zero,
+            0x1000: self._execute_one,
+            0x2000: self._execute_two,
+            0x3000: self._execute_three,
+            0x4000: self._execute_four,
+            0x5000: self._execute_five,
+            0x6000: self._execute_six,
+            0x7000: self._execute_seven,
+            0x8000: self._execute_eight,
+            0xA000: self._execute_a,
+            0xB000: self._execute_b,
+            0xC000: self._execute_c,
+            0xD000: self._execute_d,
+            0xE000: self._execute_e,
+            0xF000: self._execute_f
+        }
+        self.x = x
+        self.y = y
+        main_cases[opcode & 0xf000](opcode)

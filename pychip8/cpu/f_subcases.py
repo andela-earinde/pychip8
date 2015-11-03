@@ -87,7 +87,7 @@ def _ninth_f_execution(cpu, x, y):
         cpu.Vx[i] = cpu.memory[cpu.I + i]
 
 
-F_SUBCASES = {
+f_subcases = {
     0x0007: _first_f_execution,
     0x000A: _second_f_execution,
     0x0015: _third_f_execution,

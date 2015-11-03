@@ -16,6 +16,7 @@ class Chip8(object):
         # register used to store memory address, 16-bit
         self.I = None
 
+        # Initialize the Arithmetic logic unit
         self.opcode_executor = OpcodeExecutor(self)
 
         # 8-bit storage
@@ -100,4 +101,4 @@ class Chip8(object):
 
         self.pc += 2
 
-        self.opcode_executor.execute(opcode)
+        self.opcode_executor.execute(opcode, x, y)
