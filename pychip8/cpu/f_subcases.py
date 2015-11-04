@@ -9,7 +9,7 @@ def _first_f_execution(cpu, x, y):
     Set Vx = delay timer value.
     The value of DT is placed into Vx.
     """
-    cpu.Vx[x] = cpu.delayTimer
+    cpu.Vx[x] = cpu.delay_timer
 
 
 def _second_f_execution(cpu, x, y):
@@ -27,7 +27,7 @@ def _third_f_execution(cpu, x, y):
     Set delay timer = Vx.
     DT is set equal to the value of Vx.
     """
-    cpu.delayTimer = cpu.Vx[x]
+    cpu.delay_timer = cpu.Vx[x]
 
 
 def _fourth_f_execution(cpu, x, y):
@@ -35,7 +35,7 @@ def _fourth_f_execution(cpu, x, y):
     Set sound timer = Vx.
     ST is set equal to the value of Vx.
     """
-    cpu.soundTimer = cpu.Vx[x]
+    cpu.sound_timer = cpu.Vx[x]
 
 
 def _fifth_f_execution(cpu, x, y):

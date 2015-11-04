@@ -20,19 +20,19 @@ class Chip8(object):
         self.opcode_executor = OpcodeExecutor(self)
 
         # 8-bit storage
-        self.soundTimer = None
+        self.sound_timer = None
 
-        self.isRunning = False
-
-        # 8-bit storage
-        self.delayTimer = None
+        self.is_running = False
 
         # 8-bit storage
-        self.stackPointer = None
+        self.delay_timer = None
+
+        # 8-bit storage
+        self.stack_pointer = None
 
         # set of hex characters for representing
         # some characters
-        self.hexChars = [
+        self.hex_chars = [
             0xF0, 0x90, 0x90, 0x90, 0xF0,  # 0
             0x20, 0x60, 0x20, 0x20, 0x70,  # 1
             0xF0, 0x10, 0xF0, 0x80, 0xF0,  # 2
@@ -60,19 +60,19 @@ class Chip8(object):
 
         self.keys = []
 
-        self.soundTimer = 0
+        self.sound_timer = 0
 
         self.memory = []
 
-        self.delayTimer = 0
+        self.delay_timer = 0
 
-        self.stackPointer = 0
+        self.stack_pointer = 0
 
-        self.displayWidth = 64
+        self.display_width = 64
 
-        self.displayHeight = 32
+        self.display_height = 32
 
-        self.drawFlag = False
+        self.draw_flag = False
 
         self.display = []
 
@@ -99,6 +99,22 @@ class Chip8(object):
         self.renderer.clear_display()
         for i, j in enumerate(self.display):
             self.display[i] = 0
+
+    def set_display(self, dx, dy):
+        """
+        Handle the logic for setting the display
+        """
+        if dx > self.display_width:
+            dx -= self.display_width
+        elif dx < 0:
+            dx += self.display_width
+
+        if dx > self.display_height:
+            dx -= self.display_width
+        elif dx < 0:
+            dx += self.display_height
+
+        self.display[dx + (dy * self.display_width)] ^= 1
 
     def start_cycle(self):
         """

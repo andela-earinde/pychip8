@@ -37,7 +37,7 @@ class OpcodeExecutor(object):
         of the stack, then subtracts 1 from the stack pointer.
         """
         self.cpu.pc = self.cpu.stack.pop()
-        self.cpu.stackPointer -= 1
+        self.cpu.stack_pointer -= 1
 
     def _execute_zero(self, opcode):
         """
@@ -62,7 +62,7 @@ class OpcodeExecutor(object):
         The interpreter increments the stack pointer, then puts the
         current PC on the top of the stack. The PC is then set to nnn.
         """
-        self.cpu.stackPointer += 1
+        self.cpu.stack_pointer += 1
         self.cpu.stack.append(self.cpu.pc)
         self.cpu.pc = opcode & 0x0fff
 
@@ -148,7 +148,22 @@ class OpcodeExecutor(object):
         so part of it is outside the coordinates of the display, it wraps
         around to the opposite side of the screen.
         """
-        pass
+        self.cpu.Vx[0xf] = 0
+        xcord = self.cpu.Vx[self.x]
+        ycord = self.cpu.Vx[self.y]
+        height = opcode & 0x000f
+        pixel = 0
+
+        for i in xrange(0, height):
+            pixel = self.cpu.memory[self.cpu.I + i]
+            for j in xrange(0, 8):
+                dx = xcord + j
+                dy = ycord + i
+                if (pixel & (0x80 >> j)) != 0:
+                    if self.cpu.display[dx + (dy * self.cpu.display_width)]:
+                        self.cpu.Vx[0xf] = 1
+                    self.cpu.set_display(dx, dy)
+            self.cpu.drawFlag = True
 
     def _execute_e(self, opcode):
         e_subcases[opcode & 0x00ff](self.cpu, self.x)
