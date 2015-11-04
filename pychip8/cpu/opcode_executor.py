@@ -157,6 +157,9 @@ class OpcodeExecutor(object):
         f_subcases[opcode & 0x00ff](self.cpu, self.x)
 
     def execute(self, opcode, x, y):
+        """
+        The main opcodes for execution
+        """
         main_cases = {
             0x0000: self._execute_zero,
             0x1000: self._execute_one,

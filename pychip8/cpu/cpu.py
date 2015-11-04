@@ -86,15 +86,25 @@ class Chip8(object):
             self.memory[i] = chars
 
     def load_program(self, program):
+        """
+        Load the program into memory
+        """
         for i, chars in enumerate(program):
             self.memory[0x200 + i] = chars
 
     def clear_screen(self):
+        """
+        clear the display
+        """
         self.renderer.clear_display()
         for i, j in enumerate(self.display):
             self.display[i] = 0
 
     def start_cycle(self):
+        """
+        Start the cpu execution cycle, this is the point where
+        the opcodes are analyzed
+        """
         opcode = self.memory[self.pc] << 8 | self.memory[self.pc + 1]
         x = (opcode & 0x0f00) >> 8
         y = (opcode & 0x00f0) >> 4
