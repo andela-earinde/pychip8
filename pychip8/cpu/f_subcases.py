@@ -18,8 +18,7 @@ def _second_f_execution(cpu, x, y):
     All execution stops until a key is pressed, then the value
     of that key is stored in Vx.
     """
-    cpu.stop()
-    # cpu.wait_till_keypress(kye)
+    cpu.stop_cycle()
 
 
 def _third_f_execution(cpu, x, y):

@@ -116,15 +116,31 @@ class Chip8(object):
 
         self.display[dx + (dy * self.display_width)] ^= 1
 
+    def key_pressed(self, key):
+        self.keys[key] = True
+
+    def key_realeased(self, key):
+        self.keys[key] = False
+
+    def continue_cycle(self, key):
+        """
+        Continue cycle after pause
+        """
+        self.Vx[self.x] = key
+        self.emulate_cpu()
+
+    def stop_cycle(self):
+        self.is_running = False
+
     def start_cycle(self):
         """
         Start the cpu execution cycle, this is the point where
         the opcodes are analyzed
         """
         opcode = self.memory[self.pc] << 8 | self.memory[self.pc + 1]
-        x = (opcode & 0x0f00) >> 8
-        y = (opcode & 0x00f0) >> 4
+        self.x = (opcode & 0x0f00) >> 8
+        self.y = (opcode & 0x00f0) >> 4
 
         self.pc += 2
 
-        self.opcode_executor.execute(opcode, x, y)
+        self.opcode_executor.execute(opcode, self.x, self.y)
