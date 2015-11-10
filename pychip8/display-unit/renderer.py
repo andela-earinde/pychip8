@@ -8,24 +8,22 @@ class Renderer(Tkinter.Frame):
     def __init__(self, master=None):
         Tkinter.Frame.__init__(self, master)
         self.pack()
-        self.create_widgets()
+        self.canvas = Tkinter.Canvas(master, width=640, height=320)
+        self.canvas.pack()
+        self.screen = self.canvas.create_rectangle(
+            0, 0, 640, 320, fill="black")
 
-    def say_hi(self):
-        print "hi there, everyone!"
+    def clear_display(self):
+        self.canvas.delete(self.screen)
+        self.screen = self.canvas.create_rectangle(
+            0, 0, 640, 320, fill="black")
 
-    def create_widgets(self):
-        self.QUIT = Tkinter.Button(self)
-        self.QUIT["text"] = "QUIT"
-        self.QUIT["fg"] = "red"
-        self.QUIT["command"] = self.quit
+    def draw_graphics(self, display):
+        self.clear_display()
+        for i, j in enumerate(display):
+            x_cord = (i % 64) * 10
+            y_cord = (i / 64) * 10
 
-        self.QUIT.pack({"side": "left"})
-
-        self.hi_there = Tkinter.Button(self)
-        self.hi_there["text"] = "Hello",
-        self.hi_there["command"] = self.say_hi
-
-        self.hi_there.pack({"side": "left"})
 
 root = Tkinter.Tk()
 app = Renderer(master=root)
