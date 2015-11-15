@@ -62,7 +62,7 @@ class Chip8(object):
 
         self.sound_timer = 0
 
-        self.memory = []
+        self.memory = [None for i in xrange(0, 4095)]
 
         self.delay_timer = 0
 
@@ -74,15 +74,15 @@ class Chip8(object):
 
         self.draw_flag = False
 
-        self.display = []
+        self.display = [None for i in xrange(0, 64 * 32)]
 
         # registers 8-bit
-        self.Vx = []
+        self.Vx = [None for i in xrange(0, 16)]
 
         # 16-bit long stack
-        self.stack = []
+        self.stack = [None for i in xrange(0, 16)]
 
-        for i, chars in enumerate(self.hexChars):
+        for i, chars in enumerate(self.hex_chars):
             self.memory[i] = chars
 
     def load_program(self, program):
@@ -99,6 +99,9 @@ class Chip8(object):
         self.renderer.clear_display()
         for i, j in enumerate(self.display):
             self.display[i] = 0
+
+    def set_renderer(self, renderer):
+        self.renderer = renderer
 
     def set_display(self, dx, dy):
         """

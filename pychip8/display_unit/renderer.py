@@ -5,7 +5,7 @@ import Tkinter
 
 class Renderer(Tkinter.Frame):
 
-    def __init__(self, master=None):
+    def __init__(self, master=Tkinter.Tk()):
         Tkinter.Frame.__init__(self, master)
         self.pack()
         self.canvas = Tkinter.Canvas(master, width=640, height=320)
@@ -24,8 +24,14 @@ class Renderer(Tkinter.Frame):
             x_cord = (i % 64) * 10
             y_cord = (i / 64) * 10
 
+            if (display[i]):
+                self.canvas.create_rectangle(
+                    x_cord, y_cord, 10, 10, fill="white")
+            else:
+                self.canvas.create_rectangle(
+                    x_cord, y_cord, 10, 10, fill="black")
 
-root = Tkinter.Tk()
-app = Renderer(master=root)
-app.mainloop()
-root.destroy()
+    def initialize_screen(self):
+        self.mainloop()
+
+app = Renderer()
