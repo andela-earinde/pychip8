@@ -4,7 +4,7 @@
  thoughts into a single place and make reading the program easier
 """
 
-from pychip8.opcode_executor import OpcodeExecutor
+from opcode_executor import OpcodeExecutor
 
 
 class Chip8(object):
@@ -58,11 +58,11 @@ class Chip8(object):
 
         self.I = 0
 
-        self.keys = []
+        self.keys = [0 for i in xrange(0, 16)]
 
         self.sound_timer = 0
 
-        self.memory = [None for i in xrange(0, 4095)]
+        self.memory = [0 for i in xrange(0, 4095)]
 
         self.delay_timer = 0
 
@@ -74,13 +74,13 @@ class Chip8(object):
 
         self.draw_flag = False
 
-        self.display = [None for i in xrange(0, 64 * 32)]
+        self.display = [0 for i in xrange(0, 3000)]
 
         # registers 8-bit
-        self.Vx = [None for i in xrange(0, 16)]
+        self.Vx = [0 for i in xrange(0, 16)]
 
         # 16-bit long stack
-        self.stack = [None for i in xrange(0, 16)]
+        self.stack = [0 for i in xrange(0, 16)]
 
         for i, chars in enumerate(self.hex_chars):
             self.memory[i] = chars
@@ -101,6 +101,9 @@ class Chip8(object):
             self.display[i] = 0
 
     def set_renderer(self, renderer):
+        """
+        set the display output
+        """
         self.renderer = renderer
 
     def set_display(self, dx, dy):
@@ -135,6 +138,23 @@ class Chip8(object):
     def stop_cycle(self):
         self.is_running = False
 
+    def emulate_cpu(self):
+        self.is_running = True
+        while True:
+            if self.is_running:
+                self.start_cycle()
+            else:
+                break
+        if self.draw_flag:
+            self.renderer.draw_graphics(self.display)
+            self.draw_flag = False
+
+        if self.delay_timer > 0:
+            self.delay_timer -= 1
+
+        if self.sound_timer > 0:
+            self.sound_timer -= 1
+
     def start_cycle(self):
         """
         Start the cpu execution cycle, this is the point where
@@ -145,5 +165,4 @@ class Chip8(object):
         self.y = (opcode & 0x00f0) >> 4
 
         self.pc += 2
-
-        self.opcode_executor.execute(opcode, self.x, self.y)
+        self.opcode_executor.execute_opcode(opcode, self.x, self.y)

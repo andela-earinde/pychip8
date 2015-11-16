@@ -18,6 +18,8 @@ with open('%s/pychip8/roms/BLINKY' % (os.getcwd()), 'r') as file:
 
 chip8.load_program(loaded_program)
 
+chip8.set_renderer(app)
+
 app.initialize_screen()
 
-chip8.set_renderer(app)
+chip8.emulate_cpu()

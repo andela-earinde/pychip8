@@ -9,7 +9,7 @@ def _zero_eight_execution(cpu, x, y):
     Set Vx = Vy.
     Stores the value of register Vy in register Vx.
     """
-    cpu.Vx[x] = cpu.Vy[y]
+    cpu.Vx[x] = cpu.Vx[y]
 
 
 def _first_eight_execution(cpu, x, y):

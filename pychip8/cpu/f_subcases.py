@@ -19,6 +19,7 @@ def _second_f_execution(cpu, x, y):
     of that key is stored in Vx.
     """
     cpu.stop_cycle()
+    cpu.continue_cycle()
 
 
 def _third_f_execution(cpu, x, y):

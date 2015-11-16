@@ -11,9 +11,9 @@ kk or byte - An 8-bit value, the lowest 8 bits of the instruction
 
 from random import randint
 
-from pychip8.cpu.eight_subcases import eight_subcases
-from pychip8.cpu.e_subcases import e_subcases
-from pychip8.cpu.f_subcases import f_subcases
+from eight_subcases import eight_subcases
+from e_subcases import e_subcases
+from f_subcases import f_subcases
 
 
 class OpcodeExecutor(object):
@@ -160,7 +160,7 @@ class OpcodeExecutor(object):
                 dx = xcord + j
                 dy = ycord + i
                 if (pixel & (0x80 >> j)) != 0:
-                    if self.cpu.display[dx + (dy * self.cpu.display_width)]:
+                    if self.cpu.display[dx + (dy * self.cpu.display_width) == 1]:
                         self.cpu.Vx[0xf] = 1
                     self.cpu.set_display(dx, dy)
             self.cpu.drawFlag = True
@@ -169,9 +169,9 @@ class OpcodeExecutor(object):
         e_subcases[opcode & 0x00ff](self.cpu, self.x)
 
     def _execute_f(self, opcode):
-        f_subcases[opcode & 0x00ff](self.cpu, self.x)
+        f_subcases[opcode & 0x00ff](self.cpu, self.x, self.y)
 
-    def execute(self, opcode, x, y):
+    def execute_opcode(self, opcode, x, y):
         """
         The main opcodes for execution
         """
@@ -192,6 +192,7 @@ class OpcodeExecutor(object):
             0xE000: self._execute_e,
             0xF000: self._execute_f
         }
+
         self.x = x
         self.y = y
         main_cases[opcode & 0xf000](opcode)
