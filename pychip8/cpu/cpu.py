@@ -143,17 +143,18 @@ class Chip8(object):
         while True:
             if self.is_running:
                 self.start_cycle()
-            else:
-                break
-        if self.draw_flag:
-            self.renderer.draw_graphics(self.display)
-            self.draw_flag = False
 
-        if self.delay_timer > 0:
-            self.delay_timer -= 1
+            if self.draw_flag:
+                self.renderer.draw_graphics(self.display)
+                self.draw_flag = False
 
-        if self.sound_timer > 0:
-            self.sound_timer -= 1
+            if self.delay_timer > 0:
+                self.delay_timer -= 1
+
+            if self.sound_timer > 0:
+                self.sound_timer -= 1
+
+            self.renderer.update()
 
     def start_cycle(self):
         """

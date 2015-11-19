@@ -163,7 +163,7 @@ class OpcodeExecutor(object):
                     if self.cpu.display[dx + (dy * self.cpu.display_width) == 1]:
                         self.cpu.Vx[0xf] = 1
                     self.cpu.set_display(dx, dy)
-            self.cpu.drawFlag = True
+            self.cpu.draw_flag = True
 
     def _execute_e(self, opcode):
         e_subcases[opcode & 0x00ff](self.cpu, self.x)
