@@ -21,5 +21,8 @@ setup(
     author_email='eniola.arinde@andela.com',
     url='https://github.com/andela-earinde/pychip8',
     license='MIT',
-    packages=find_packages(exclude=('tests', 'docs'))
+    packages=find_packages(exclude=('tests', 'docs')),
+    install_requires=[
+        'pyglet',
+    ],
 )

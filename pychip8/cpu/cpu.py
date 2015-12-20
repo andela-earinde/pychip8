@@ -74,7 +74,8 @@ class Chip8(object):
 
         self.draw_flag = False
 
-        self.display = [0 for i in xrange(0, 3000)]
+        self.display = [0 for i in
+                        xrange(0, self.display_width * self.display_height)]
 
         # registers 8-bit
         self.Vx = [0 for i in xrange(0, 16)]
@@ -94,7 +95,7 @@ class Chip8(object):
 
     def clear_screen(self):
         """
-        clear the display
+        Clear the display
         """
         self.renderer.clear_display()
         for i, j in enumerate(self.display):
@@ -102,7 +103,7 @@ class Chip8(object):
 
     def set_renderer(self, renderer):
         """
-        set the display output
+        Set the display output
         """
         self.renderer = renderer
 
@@ -142,9 +143,11 @@ class Chip8(object):
         self.is_running = True
         while True:
             if self.is_running:
+                print "cycle call"
                 self.start_cycle()
 
             if self.draw_flag:
+                print "display call"
                 self.renderer.draw_graphics(self.display)
                 self.draw_flag = False
 
@@ -153,8 +156,6 @@ class Chip8(object):
 
             if self.sound_timer > 0:
                 self.sound_timer -= 1
-
-            self.renderer.update()
 
     def start_cycle(self):
         """

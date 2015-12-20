@@ -153,14 +153,13 @@ class OpcodeExecutor(object):
         ycord = self.cpu.Vx[self.y]
         height = opcode & 0x000f
         pixel = 0
-
         for i in xrange(0, height):
             pixel = self.cpu.memory[self.cpu.I + i]
             for j in xrange(0, 8):
                 dx = xcord + j
                 dy = ycord + i
                 if (pixel & (0x80 >> j)) != 0:
-                    if self.cpu.display[dx + (dy * self.cpu.display_width) == 1]:
+                    if self.cpu.display[dx + (dy * self.cpu.display_width)] == 1:
                         self.cpu.Vx[0xf] = 1
                     self.cpu.set_display(dx, dy)
             self.cpu.draw_flag = True

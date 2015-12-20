@@ -1,41 +1,27 @@
 #!/usr/bin/python
+import pyglet
+import os
 
-import Tkinter
 
+class Renderer(pyglet.window.Window):
 
-class Renderer(Tkinter.Frame):
+    def __init__(self):
+        self.pixel = pyglet.image.load(
+            'pixel.png',
+            file=open('%s/pychip8/pixel.png' % (os.getcwd()), 'rb')
+        )
 
-    def __init__(self, master=Tkinter.Tk()):
-        self.master = master
-        Tkinter.Frame.__init__(self, self.master)
-        self.pack()
-        self.canvas = Tkinter.Canvas(self.master, width=640, height=320)
-        self.canvas.pack()
-        self.screen = self.canvas.create_rectangle(
-            0, 0, 640, 320, fill="black")
+    def on_key_press(self, symbol, modifiers):
+        pass
 
-    def clear_display(self):
-        self.canvas.delete(self.screen)
-        self.screen = self.canvas.create_rectangle(
-            0, 0, 640, 320, fill="black")
+    def on_key_release(self, symbol, modifiers):
+        pass
 
     def draw_graphics(self, display):
-        import pdb; pdb.set_trace()
-        self.clear_display()
-        for i, j in enumerate(display):
+        self.clear()
+        for i in xrange(0, len(display)):
             x_cord = (i % 64) * 10
             y_cord = (i / 64) * 10
-
             if display[i]:
-                self.canvas.create_rectangle(
-                    x_cord, y_cord, 10, 10, fill="white")
-            else:
-                self.canvas.create_rectangle(
-                    x_cord, y_cord, 10, 10, fill="black")
-
-            self.master.update_idletasks()
-
-    def initialize_screen(self):
-        self.master.update()
-
-app = Renderer()
+                self.pixel.blit(x_cord, 310 - y_cord)
+        self.flip()
