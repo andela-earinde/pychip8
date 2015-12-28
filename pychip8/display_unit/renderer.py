@@ -5,7 +5,8 @@ import os
 
 class Renderer(pyglet.window.Window):
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(Renderer, self).__init__(*args, **kwargs)
         self.pixel = pyglet.image.load(
             'pixel.png',
             file=open('%s/pychip8/pixel.png' % (os.getcwd()), 'rb')
@@ -16,6 +17,9 @@ class Renderer(pyglet.window.Window):
 
     def on_key_release(self, symbol, modifiers):
         pass
+
+    def clear_display(self):
+        self.clear()
 
     def draw_graphics(self, display):
         self.clear()

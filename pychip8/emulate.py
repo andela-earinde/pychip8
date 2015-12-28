@@ -12,13 +12,13 @@ chip8.initialize()
 
 loaded_program = []
 
-with open('%s/pychip8/roms/BLITZ' % (os.getcwd()), 'r') as file:
+with open('%s/pychip8/roms/BLINKY' % (os.getcwd()), 'r') as file:
     for byte in iter(partial(file.read, 1), b''):
         loaded_program.append(ord(byte))
 
 chip8.load_program(loaded_program)
 
-renderer = Renderer()
+renderer = Renderer(640, 320)
 
 chip8.set_renderer(renderer)
 

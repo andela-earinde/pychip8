@@ -58,11 +58,11 @@ class Chip8(object):
 
         self.I = 0
 
-        self.keys = [0 for i in xrange(0, 16)]
+        self.keys = [0 for i in xrange(16)]
 
         self.sound_timer = 0
 
-        self.memory = [0 for i in xrange(0, 4095)]
+        self.memory = [0 for i in xrange(4095)]
 
         self.delay_timer = 0
 
@@ -75,13 +75,13 @@ class Chip8(object):
         self.draw_flag = False
 
         self.display = [0 for i in
-                        xrange(0, self.display_width * self.display_height)]
+                        xrange(self.display_width * self.display_height)]
 
         # registers 8-bit
-        self.Vx = [0 for i in xrange(0, 16)]
+        self.Vx = [0 for i in xrange(16)]
 
         # 16-bit long stack
-        self.stack = [0 for i in xrange(0, 16)]
+        self.stack = [0 for i in xrange(16)]
 
         for i, chars in enumerate(self.hex_chars):
             self.memory[i] = chars
@@ -116,10 +116,10 @@ class Chip8(object):
         elif dx < 0:
             dx += self.display_width
 
-        if dx > self.display_height:
-            dx -= self.display_width
-        elif dx < 0:
-            dx += self.display_height
+        if dy > self.display_height:
+            dy -= self.display_height
+        elif dy < 0:
+            dy += self.display_height
 
         self.display[dx + (dy * self.display_width)] ^= 1
 
@@ -143,11 +143,9 @@ class Chip8(object):
         self.is_running = True
         while True:
             if self.is_running:
-                print "cycle call"
                 self.start_cycle()
 
             if self.draw_flag:
-                print "display call"
                 self.renderer.draw_graphics(self.display)
                 self.draw_flag = False
 

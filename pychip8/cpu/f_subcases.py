@@ -73,7 +73,7 @@ def _eight_f_execution(cpu, x, y):
     The interpreter copies the values of registers V0 through Vx into
     memory, starting at the address in I.
     """
-    for i in xrange(0, x + 1):
+    for i in xrange(x + 1):
         cpu.memory[cpu.I + i] = cpu.Vx[i]
 
 
@@ -83,7 +83,7 @@ def _ninth_f_execution(cpu, x, y):
     The interpreter reads values from memory starting at location I
     into registers V0 through Vx.
     """
-    for i in xrange(0, x + 1):
+    for i in xrange(x + 1):
         cpu.Vx[i] = cpu.memory[cpu.I + i]
 
 

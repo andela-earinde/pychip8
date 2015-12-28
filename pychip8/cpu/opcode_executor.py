@@ -27,7 +27,7 @@ class OpcodeExecutor(object):
         Clear the display.
         """
         self.cpu.renderer.clear_display()
-        for i, j in enumerate(self.cpu.display):
+        for i in xrange(len(self.cpu.display)):
             self.cpu.display[i] = 0
 
     def _return_from_subroutine(self):
@@ -113,6 +113,19 @@ class OpcodeExecutor(object):
         Execute for primary opcodes that begin with eight
         """
         eight_subcases[opcode & 0x000f](self.cpu, self.x, self.y)
+        # try:
+        #     eight_subcases[opcode & 0x000f](self.cpu, self.x, self.y)
+        # except:
+        #     print "Unknown instruction 8: {}".format(opcode)
+
+    def _execute_ninth(self, opcode):
+        """
+        Skip next instruction if Vx != Vy.
+        The values of Vx and Vy are compared, and if they are not equal,
+        the program counter is increased by 2.
+        """
+        if self.cpu.Vx[self.x] != self.cpu.Vx[self.y]:
+            self.cpu.pc += 2
 
     def _execute_a(self, opcode):
         """
@@ -153,22 +166,33 @@ class OpcodeExecutor(object):
         ycord = self.cpu.Vx[self.y]
         height = opcode & 0x000f
         pixel = 0
-        for i in xrange(0, height):
+        for i in xrange(height):
             pixel = self.cpu.memory[self.cpu.I + i]
-            for j in xrange(0, 8):
+            for j in xrange(8):
                 dx = xcord + j
                 dy = ycord + i
                 if (pixel & (0x80 >> j)) != 0:
-                    if self.cpu.display[dx + (dy * self.cpu.display_width)] == 1:
-                        self.cpu.Vx[0xf] = 1
+                    try:
+                        if self.cpu.display[dx + (dy * self.cpu.display_width)] == 1:
+                            self.cpu.Vx[0xf] = 1
+                    except:
+                        import pdb; pdb.set_trace()
                     self.cpu.set_display(dx, dy)
             self.cpu.draw_flag = True
 
     def _execute_e(self, opcode):
         e_subcases[opcode & 0x00ff](self.cpu, self.x)
+        # try:
+        #     e_subcases[opcode & 0x00ff](self.cpu, self.x)
+        # except:
+        #     print "Unknown instruction E: {}".format(opcode)
 
     def _execute_f(self, opcode):
         f_subcases[opcode & 0x00ff](self.cpu, self.x, self.y)
+        # try:
+        #     f_subcases[opcode & 0x00ff](self.cpu, self.x, self.y)
+        # except:
+        #     print "Unknown instruction F: {}".format(opcode)
 
     def execute_opcode(self, opcode, x, y):
         """
@@ -184,6 +208,7 @@ class OpcodeExecutor(object):
             0x6000: self._execute_six,
             0x7000: self._execute_seven,
             0x8000: self._execute_eight,
+            0x9000: self._execute_ninth,
             0xA000: self._execute_a,
             0xB000: self._execute_b,
             0xC000: self._execute_c,
@@ -195,3 +220,7 @@ class OpcodeExecutor(object):
         self.x = x
         self.y = y
         main_cases[opcode & 0xf000](opcode)
+        # try:
+        #     main_cases[opcode & 0xf000](opcode)
+        # except:
+        #     print "Unknown instruction main: {}".format(opcode)
