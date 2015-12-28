@@ -26,6 +26,7 @@ class OpcodeExecutor(object):
         """
         Clear the display.
         """
+        self.cpu.log("Clear Display")
         self.cpu.renderer.clear_display()
         for i in xrange(len(self.cpu.display)):
             self.cpu.display[i] = 0
@@ -36,6 +37,7 @@ class OpcodeExecutor(object):
         The interpreter sets the program counter to the address at the top
         of the stack, then subtracts 1 from the stack pointer.
         """
+        self.cpu.log("Return from a subroutine")
         self.cpu.pc = self.cpu.stack.pop()
         self.cpu.stack_pointer -= 1
 
@@ -54,6 +56,7 @@ class OpcodeExecutor(object):
         Jump to location nnn.
         The interpreter sets the program counter to nnn.
         """
+        self.cpu.log("Jump to location nnn")
         self.cpu.pc = opcode & 0x0fff
 
     def _execute_two(self, opcode):
@@ -62,6 +65,7 @@ class OpcodeExecutor(object):
         The interpreter increments the stack pointer, then puts the
         current PC on the top of the stack. The PC is then set to nnn.
         """
+        self.cpu.log("Call subroutine at nnn")
         self.cpu.stack_pointer += 1
         self.cpu.stack.append(self.cpu.pc)
         self.cpu.pc = opcode & 0x0fff
@@ -72,6 +76,7 @@ class OpcodeExecutor(object):
         The interpreter compares register Vx to kk, and if they are equal,
         increments the program counter by 2.
         """
+        self.cpu.log("Skip next instruction if Vx = kk")
         if self.cpu.Vx[self.x] == (opcode & 0x00ff):
             self.cpu.pc += 2
 
@@ -81,6 +86,7 @@ class OpcodeExecutor(object):
         The interpreter compares register Vx to kk, and if they are not equal,
         increments the program counter by 2.
         """
+        self.cpu.log("Skip next instruction if Vx != kk")
         if self.cpu.Vx[self.x] != (opcode & 0x00ff):
             self.cpu.pc += 2
 
@@ -90,6 +96,7 @@ class OpcodeExecutor(object):
         The interpreter compares register Vx to register Vy, and if
         they are equal, increments the program counter by 2.
         """
+        self.cpu.log("Skip next instruction if Vx = Vy")
         if self.cpu.Vx[self.x] == self.cpu.Vx[self.y]:
             self.cpu.pc += 2
 
@@ -98,6 +105,7 @@ class OpcodeExecutor(object):
         Set Vx = kk.
         The interpreter puts the value kk into register Vx.
         """
+        self.cpu.log("Set Vx = kk")
         self.cpu.Vx[self.x] = opcode & 0x00ff
 
     def _execute_seven(self, opcode):
@@ -106,6 +114,7 @@ class OpcodeExecutor(object):
         Adds the value kk to the value of register Vx,
         then stores the result in Vx.
         """
+        self.cpu.log("Set Vx = Vx + kk")
         self.cpu.Vx[self.x] += opcode & 0x00ff
 
     def _execute_eight(self, opcode):
@@ -124,6 +133,7 @@ class OpcodeExecutor(object):
         The values of Vx and Vy are compared, and if they are not equal,
         the program counter is increased by 2.
         """
+        self.cpu.log("Skip next instruction if Vx != Vy")
         if self.cpu.Vx[self.x] != self.cpu.Vx[self.y]:
             self.cpu.pc += 2
 
@@ -132,6 +142,7 @@ class OpcodeExecutor(object):
         Set I = nnn.
         The value of register I is set to nnn.
         """
+        self.cpu.log("Set I = nnn")
         self.cpu.I = opcode & 0x0fff
 
     def _execute_b(self, opcode):
@@ -139,6 +150,7 @@ class OpcodeExecutor(object):
         Jump to location nnn + V0.
         The program counter is set to nnn plus the value of V0.
         """
+        self.cpu.log("Jump to location nnn + V0")
         self.cpu.pc = (opcode & 0x0fff) + self.cpu.Vx[0]
 
     def _execute_c(self, opcode):
@@ -148,6 +160,7 @@ class OpcodeExecutor(object):
         which is then ANDed with the value kk. The results are
         stored in Vx. See instruction 8xy2 for more information on AND.
         """
+        self.cpu.log("Set Vx = random byte AND kk")
         self.cpu.Vx[self.x] = randint(0, 0xff) & (opcode & 0x00ff)
 
     def _execute_d(self, opcode):
@@ -161,6 +174,7 @@ class OpcodeExecutor(object):
         so part of it is outside the coordinates of the display, it wraps
         around to the opposite side of the screen.
         """
+        self.cpu.log("Draw to screen")
         self.cpu.Vx[0xf] = 0
         xcord = self.cpu.Vx[self.x]
         ycord = self.cpu.Vx[self.y]

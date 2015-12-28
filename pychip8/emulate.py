@@ -12,7 +12,7 @@ chip8.initialize()
 
 loaded_program = []
 
-with open('%s/pychip8/roms/BLINKY' % (os.getcwd()), 'r') as file:
+with open('%s/pychip8/roms/INVADERS' % (os.getcwd()), 'r') as file:
     for byte in iter(partial(file.read, 1), b''):
         loaded_program.append(ord(byte))
 

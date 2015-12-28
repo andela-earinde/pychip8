@@ -10,6 +10,8 @@ from opcode_executor import OpcodeExecutor
 class Chip8(object):
 
     def __init__(self):
+        self.debug = False
+
         # program counter
         self.pc = 0
 
@@ -90,13 +92,19 @@ class Chip8(object):
         """
         Load the program into memory
         """
+        self.log("Load the program into memory")
         for i, chars in enumerate(program):
             self.memory[0x200 + i] = chars
+
+    def log(self, msg):
+        if self.debug:
+            print msg
 
     def clear_screen(self):
         """
         Clear the display
         """
+        self.log("Clear the display")
         self.renderer.clear_display()
         for i, j in enumerate(self.display):
             self.display[i] = 0
@@ -111,6 +119,7 @@ class Chip8(object):
         """
         Handle the logic for setting the display
         """
+        self.log("Set the display")
         if dx > self.display_width:
             dx -= self.display_width
         elif dx < 0:
@@ -140,6 +149,7 @@ class Chip8(object):
         self.is_running = False
 
     def emulate_cpu(self):
+        self.log("Emulate Cpu")
         self.is_running = True
         while True:
             if self.is_running:
@@ -160,6 +170,7 @@ class Chip8(object):
         Start the cpu execution cycle, this is the point where
         the opcodes are analyzed
         """
+        self.log("Start cycle")
         opcode = self.memory[self.pc] << 8 | self.memory[self.pc + 1]
         self.x = (opcode & 0x0f00) >> 8
         self.y = (opcode & 0x00f0) >> 4
