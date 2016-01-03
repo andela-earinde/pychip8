@@ -59,7 +59,7 @@ def _sixth_f_execution(cpu, x, y):
     information on the Chip-8 hexadecimal font.
     """
     cpu.log("Set I = location of sprite for digit Vx")
-    cpu.I = (cpu.Vx[x] * 5) & 0xfff
+    cpu.I = cpu.Vx[x] * 5
 
 
 def _seventh_f_execution(cpu, x, y):

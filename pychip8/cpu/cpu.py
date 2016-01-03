@@ -83,7 +83,7 @@ class Chip8(object):
         self.Vx = [0 for i in xrange(16)]
 
         # 16-bit long stack
-        self.stack = [0 for i in xrange(16)]
+        self.stack = []
 
         for i, chars in enumerate(self.hex_chars):
             self.memory[i] = chars
