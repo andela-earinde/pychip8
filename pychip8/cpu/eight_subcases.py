@@ -11,6 +11,7 @@ def _zero_eight_execution(cpu, x, y):
     """
     cpu.log("Set Vx = Vy")
     cpu.Vx[x] = cpu.Vx[y]
+    cpu.Vx[x] &= 0xff
 
 
 def _first_eight_execution(cpu, x, y):
@@ -23,6 +24,7 @@ def _first_eight_execution(cpu, x, y):
     """
     cpu.log("Set Vx = Vx OR Vy")
     cpu.Vx[x] = cpu.Vx[x] | cpu.Vx[y]
+    cpu.Vx[x] &= 0xff
 
 
 def _second_eight_execution(cpu, x, y):
@@ -35,6 +37,7 @@ def _second_eight_execution(cpu, x, y):
     """
     cpu.log("Set Vx = Vx AND Vy")
     cpu.Vx[x] = cpu.Vx[x] & cpu.Vx[y]
+    cpu.Vx[x] &= 0xff
 
 
 def _third_eight_execution(cpu, x, y):
@@ -47,6 +50,7 @@ def _third_eight_execution(cpu, x, y):
     """
     cpu.log("Set Vx = Vx XOR Vy")
     cpu.Vx[x] = cpu.Vx[x] ^ cpu.Vx[y]
+    cpu.Vx[x] &= 0xff
 
 
 def _fourth_eight_execution(cpu, x, y):
@@ -65,6 +69,7 @@ def _fourth_eight_execution(cpu, x, y):
         cpu.Vx[0xf] = 0
 
     cpu.Vx[x] = sum
+    cpu.Vx[x] &= 0xff
 
 
 def _fifth_eight_execution(cpu, x, y):
@@ -80,6 +85,7 @@ def _fifth_eight_execution(cpu, x, y):
         cpu.Vx[0xf] = 0
 
     cpu.Vx[x] = cpu.Vx[x] - cpu.Vx[y]
+    cpu.Vx[x] &= 0xff
 
 
 def _sixth_eight_execution(cpu, x, y):
@@ -106,6 +112,7 @@ def _seventh_eight_execution(cpu, x, y):
         cpu.Vx[0xf] = 1
 
     cpu.Vx[x] = cpu.Vx[y] - cpu.Vx[x]
+    cpu.Vx[x] &= 0xff
 
 
 def _eight_eight_execution(cpu, x, y):
@@ -117,6 +124,7 @@ def _eight_eight_execution(cpu, x, y):
     cpu.log("Set Vx = Vx SHL 1")
     cpu.Vx[0xf] = cpu.Vx[x] & 0x80
     cpu.Vx[x] = cpu.Vx[x] << 1
+    cpu.Vx[x] &= 0xff
 
 eight_subcases = {
     0x0000: _zero_eight_execution,

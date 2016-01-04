@@ -162,6 +162,7 @@ class OpcodeExecutor(object):
         """
         self.cpu.log("Set Vx = random byte AND kk")
         self.cpu.Vx[self.x] = randint(0, 0xff) & (opcode & 0x00ff)
+        self.cpu.Vx[self.x] &= 0xff
 
     def _execute_d(self, opcode):
         """

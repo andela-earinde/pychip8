@@ -171,7 +171,7 @@ class Chip8(object):
         the opcodes are analyzed
         """
         self.log("Start cycle")
-        opcode = self.memory[self.pc] << 8 | self.memory[self.pc + 1]
+        opcode = (self.memory[self.pc] << 8) | self.memory[self.pc + 1]
         self.x = (opcode & 0x0f00) >> 8
         self.y = (opcode & 0x00f0) >> 4
 

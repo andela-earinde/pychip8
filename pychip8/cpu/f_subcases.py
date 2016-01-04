@@ -49,6 +49,11 @@ def _fifth_f_execution(cpu, x, y):
     """
     cpu.log("Set I = I + Vx")
     cpu.I += cpu.Vx[x]
+    if cpu.I > 0xfff:
+        cpu.Vx[0xf] = 1
+        cpu.I &= 0xfff
+    else:
+        cpu.Vx[0xf] = 0
 
 
 def _sixth_f_execution(cpu, x, y):
@@ -59,7 +64,7 @@ def _sixth_f_execution(cpu, x, y):
     information on the Chip-8 hexadecimal font.
     """
     cpu.log("Set I = location of sprite for digit Vx")
-    cpu.I = cpu.Vx[x] * 5
+    cpu.I = (cpu.Vx[x] * 5) & 0xfff
 
 
 def _seventh_f_execution(cpu, x, y):
@@ -83,6 +88,7 @@ def _eight_f_execution(cpu, x, y):
     cpu.log("Store registers V0 through Vx in memory starting at location I")
     for i in xrange(x + 1):
         cpu.memory[cpu.I + i] = cpu.Vx[i]
+    cpu.I += (x + 1)
 
 
 def _ninth_f_execution(cpu, x, y):
@@ -94,6 +100,7 @@ def _ninth_f_execution(cpu, x, y):
     cpu.log("Read registers V0 through Vx from memory starting at location I")
     for i in xrange(x + 1):
         cpu.Vx[i] = cpu.memory[cpu.I + i]
+    cpu.I += (x + 1)
 
 
 f_subcases = {
